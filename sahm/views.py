@@ -119,7 +119,7 @@ def cadastro_monitoria(request):
                     now = date.today()
                     data = datetime.strptime(str(dia_cad), "%Y-%m-%d").date()
                     tempo = datetime.strptime(str(hora_inicio_cad), "%H:%M:%S").time()
-                    
+
                     if data < now or data.year > now.year:
                         return render(request, 'sahm/monitoria.html', {'msg2':'Informe uma Data no Tempo Certo!', 'form':form})
 
@@ -173,8 +173,6 @@ def dados_cadastrais_monitor(request):
 
     try:
 
-        monitor = Monitor.objects.get(user=user)
-
         #try:
 
             #form_monitor = MonitorModelForm(request.POST or None, initial={'telefone': user.monitor.telefone, 'nascimento':user.monitor.nascimento,'curso': user.monitor.curso, 'materia':user.monitor.materia}, prefix="moni")
@@ -184,6 +182,7 @@ def dados_cadastrais_monitor(request):
 
         if request.method == "POST":
             #form_monitor = MonitorModelForm(request.POST or None, initial={'telefone':user.monitor.telefone, 'nascimento':user.monitor.nascimento, 'curso': user.monitor.curso, 'materia':user.monitor.materia}, prefix="moni")
+            monitor = Monitor.objects.get(user=user)
             form_monitor = MonitorModelForm(request.POST or None, instance=monitor)
             if form_monitor.is_valid():
                 if request.user.is_authenticated:
@@ -210,6 +209,7 @@ def dados_cadastrais_monitor(request):
             else:
                 return redirect('/acesso')
         else:
+            monitor = Monitor.objects.get(user=user)
             form_monitor = MonitorModelForm(instance=monitor)
             context = {'form_monitor':form_monitor, 'user':user}
             return render(request, 'sahm/updateMonitor.html', context)
@@ -244,7 +244,7 @@ def dados_cadastrais_monitor(request):
             else:
                 return redirect('/acesso')
         else:
-            form_monitor = MonitorModelForm(instance=monitor)
+            form_monitor = MonitorModelForm()
             context = {'form_monitor':form_monitor, 'user':user}
             return render(request, 'sahm/updateMonitor.html', context)
 

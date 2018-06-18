@@ -6,4 +6,12 @@
   <h2 class="page-header">Monitorias Cadastradas</h2>
 </div>
 
+<div class="row2">
+  <a href="{% url 'sahm:cadastro_monitoria' %}">Adicionar Monitoria</a>
+</div>
+
+{% for mon in user.all %}
+  {{mon.monitoria.sala}}
+{% endfor %}
+
 {% endblock %}
