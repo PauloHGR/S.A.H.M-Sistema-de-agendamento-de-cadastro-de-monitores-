@@ -118,19 +118,19 @@ def cadastro_monitoria(request):
                     tempo = datetime.strptime(str(hora_inicio_cad), "%H:%M:%S").time()
 
                     if data < now or data.year > now.year:
-                        return render(request, 'sahm/monitoria.html', {'msg2':'Informe uma Data no Tempo Certo!', 'form':form})
+                        return render(request, 'sahm/monitoria.html', {'msg2':'Informe uma data no tempo certo!', 'form':form})
 
                     check_sala = Monitoria.objects.filter(sala=sala_cad, dia=dia_cad, hora_inicio=hora_inicio_cad)
 
                     if check_sala.exists():
-                        return render(request, 'sahm/monitoria.html', {'msg2':'Monitoria Já cadastrada nesse horário!', 'form':form})
+                        return render(request, 'sahm/monitoria.html', {'msg2':'Monitoria já cadastrada nesse horário!', 'form':form})
 
                     try:
                         check_horario = Monitoria.objects.get(sala=sala_cad, dia=dia_cad)
 
                         if check_horario:
                             if tempo >= check_horario.hora_inicio and tempo < check_horario.hora_termino:
-                                return render(request, 'sahm/monitoria.html', {'msg2':'Monitoria Já cadastrada nesse intervalo!', 'form':form})
+                                return render(request, 'sahm/monitoria.html', {'msg2':'Monitoria já cadastrada nesse intervalo!', 'form':form})
 
                     except Monitoria.DoesNotExist:
                         monitoria = form.save(commit=False)
