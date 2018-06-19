@@ -2,5 +2,60 @@
 
 {% block content %}
 
+{{msg}}
+
+<h2>Tabela de horários das monitorias</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Nome do Aluno</th>
+        <th>Disciplina</th>
+        <th>Curso</th>
+        <th>Dia</th>
+        <th>Horário de Inicio</th>
+        <th>Horário de Terminio</th>
+        <th>Sala</th>
+      </tr>
+    </thead>
+    <tbody>
+        <form class="form-horizontal" data-toggle="validator" role="form" method="POST" action="{% url 'sahm:lista_monitorias' %}">{% csrf_token %}
+          <h3>Escolha uma Disciplina</h3>
+          <div class="row">
+          <select name="cur" class="selectpicker form-control" id="select_curso">
+            <option value='1' selected = 'selected'>CSHNB - ADMINISTRAÇÃO</option>
+            <option value='2'>CSHNB - CIÊNCIAS BIOLÓGICAS</option>
+            <option value='3'>CSHNB - ENFERMAGEM</option>
+            <option value='4'>CSHNB - HISTÓRIA</option>
+            <option value='5'>CSHNB - LETRAS</option>
+            <option value='6'>CSHNB - MATEMÁTICA</option>
+            <option value='7'>CSHNB - MEDICINA</option>
+            <option value='8'>CSHNB - NUTRIÇÃO</option>
+            <option value='9'>CSHNB - PEDAGOGIA</option>
+            <option value='10'>CSHNB - SISTEMAS DE INFORMAÇÃO</option>
+
+          </select>
+          </div>
+
+          <div class="row" id="actions">
+            <button type="submit" class="btn btn-primary" value="Submit">Consultar</button>
+            <a href="{% url 'sahm:index' %}" class="btn btn-default">Cancelar</a>
+          </div>
+        </form>
+
+      {}
+      {% for m in monitorias %}
+
+      <tr>
+        <td>{{ m.user.first_name }}</td>
+        <td>{{ m.user.monitor.materia }}</td>
+        <td>{{ m.user.monitor.curso }}</td>
+        <td>{{ m.dia }}</td>
+        <td>{{ m.hora_inicio }}</td>
+        <td>{{ m.hora_termino }}</td>
+        <td>{{ m.sala }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}

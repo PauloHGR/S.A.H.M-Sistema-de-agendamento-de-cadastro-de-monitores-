@@ -18,7 +18,7 @@
 
     {% for monitoria in monitorias %}
       <div class="col-md-2">
-      <a href="{% url 'sahm:alterar_monitoria'  pk=monitoria.pk %}"><h4>Monitoria:{{monitoria.pk}}</br>Sala:{{monitoria.sala}}</br>{{monitoria.dia}}</h4></a>
+        <a href="{% url 'sahm:alterar_monitoria' %}"><h4>Monitoria:{{monitoria.pk}}</br>Sala:{{monitoria.sala}}</br>{{monitoria.dia}}</h4></a>
       </div>
     {% endfor %}
   </div>

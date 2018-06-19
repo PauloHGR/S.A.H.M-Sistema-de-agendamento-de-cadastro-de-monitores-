@@ -5,7 +5,6 @@ app_name = 'sahm'
 urlpatterns = [
     url(r'^$', views.tela_inicial, name='index'),
     url(r'^sobre/$', views.sobre, name='sobre'),
-    url(r'^como_funciona/$', views.horario, name='horario'),
     url(r'^contate-nos/$', views.contato, name='contato'),
     url(r'^login/$', views.monitor_login, name='login'),
     url(r'^cadastro/$', views.cadastrar_monitor, name='cadastrar_monitor'),
@@ -19,5 +18,6 @@ urlpatterns = [
     url(r'^mudar_email/$', views.update_email, name='update_email'),
     url(r'^excluir_conta/$', views.excluir_conta, name='excluir_conta'),
     url(r'^monitorias_disponiveis/$', views.lista_monitorias, name='lista_monitorias'),
-    url(r'^alterar_monitoria/(?P<pk>[0-9]+)/$', views.alterar_monitoria, name='alterar_monitoria'),
+    #url(r'^alterar_monitoria/(?P<pk>[0-9]+)/$', views.alterar_monitoria, name='alterar_monitoria'),
+    url(r'^alterar_monitoria/$', views.alterar_monitoria, name='alterar_monitoria'),
 ]

@@ -27,9 +27,6 @@ def tela_inicial(request):
 def sobre(request):
     return render(request, 'sobre.html')
 
-def horario(request):
-    return render(request, 'funcionamento.html')
-
 def contato(request):
     return render(request, 'contato.html')
 
@@ -345,13 +342,13 @@ def feed_monitoria(request):
     return render(request, 'sahm/feedMonitoria.html', context)
 
 @login_required
-def alterar_monitoria(request, pk):
-    #user = User.objects.get(username= request.user.username)
+def alterar_monitoria(request):
+    user = User.objects.get(username= request.user.username)
 
     try:
         if request.method == "POST":
 
-            monitoria = Monitoria.objects.get(pk=pk)
+            monitoria = Monitoria.objects.get(user=user)
             form_monitoria = MonitoriaModelForm(request.POST or None, instance=monitoria)
             if form_monitoria.is_valid():
                 if request.user.is_authenticated:
@@ -372,42 +369,42 @@ def alterar_monitoria(request, pk):
             else:
                 return redirect('/acesso')
         else:
-            monitoria = Monitoria.objects.get(pk=pk)
+            monitoria = Monitoria.objects.get(user=user)
             form_monitoria = MonitoriaModelForm(instance=monitoria)
             context = {'form_monitoria':form_monitoria, 'user':user}
             return render(request, 'sahm/monitoria_update.html', context)
 
     except Monitoria.DoesNotExist:
 
-        if request.method == "POST":
+        #if request.method == "POST":
             #form_monitor = MonitorModelForm(request.POST or None, initial={'telefone':user.monitor.telefone, 'nascimento':user.monitor.nascimento, 'curso': user.monitor.curso, 'materia':user.monitor.materia}, prefix="moni")
-            form_monitoria = MonitoriaModelForm(request.POST or None)
-            if form_monitoria.is_valid():
-                if request.user.is_authenticated:
+        #    form_monitoria = MonitoriaModelForm(request.POST or None)
+        #    if form_monitoria.is_valid():
+        #        if request.user.is_authenticated:
 
-                    monitoria = form_monitoria.save(commit=False)
-                    monitoria.user = user
-                    monitoria.sala = form_monitoria.cleaned_data.get('sala')
-                    monitoria.dia = form_monitoria.cleaned_data.get('dia')
-                    monitoria.hora_inicio = form_monitoria.cleaned_data.get('hora_inicio')
-                    monitoria.hora_termino = form_monitoria.cleaned_data.get('hora_termino')
-                    monitoria.save()
-                    context = {'form_monitoria':monitoria, 'user':user, 'msg':'Dados alterados com sucesso!'}
-                    return render(request, 'sahm/monitoria_update.html', context)
+        #            monitoria = form_monitoria.save(commit=False)
+        #            monitoria.user = user
+        #            monitoria.sala = form_monitoria.cleaned_data.get('sala')
+        #            monitoria.dia = form_monitoria.cleaned_data.get('dia')
+        #            monitoria.hora_inicio = form_monitoria.cleaned_data.get('hora_inicio')
+        #            monitoria.hora_termino = form_monitoria.cleaned_data.get('hora_termino')
+        #            monitoria.save()
+        #            context = {'form_monitoria':monitoria, 'user':user, 'msg':'Dados alterados com sucesso!'}
+        #            return render(request, 'sahm/monitoria_update.html', context)
 
-                else:
-                    return redirect('/acesso')
+        #        else:
+        #            return redirect('/acesso')
 
-            else:
-                return redirect('/acesso')
-        else:
-            form_monitoria = MonitoriaModelForm()
-            context = {'form_monitoria':form_monitoria, 'user':user}
-            return render(request, 'sahm/monitoria_update.html', context)
+        #    else:
+        #        return redirect('/acesso')
+        #else:
+        #    form_monitoria = MonitoriaModelForm()
+        #    context = {'form_monitoria':form_monitoria, 'user':user}
+            return render(request, 'sahm/monitoria_update.html', {'msg':'Nenhuma Monitoria Cadastrada'})
 
 def lista_monitorias(request):
-    user = User.objects.get(username=request.user.username)
-    monitorias = user.monitoria.all()
+    #user = User.objects.get(username=request.user.username)
+    #monitorias = user.monitoria.all()
     #monitorias = Monitoria.objects.select_related('user').all()
 
     #try:
@@ -415,8 +412,27 @@ def lista_monitorias(request):
     #except Monitoria.DoesNotExist:
         #return render(request, 'sahm/feedMonitoria.html', {'msg':'sem'})
 
-    context = {'monitorias':monitorias}
-    return render(request, 'funcionamento.html', context)
+    #context = {'monitorias':monitorias}
+    #return render(request, 'funcionamento.html', context)
+
+    #consulta = Monitoria.objects.all()
+    select_curso = request.POST.get('cur')
+
+    try:
+        #monitor = Monitor.objects.filter(curso=select_curso)
+        #user = User.objects.get(monitor=monitor)
+        consulta = Monitoria.objects.all()
+
+        context= {
+            'monitorias' : consulta,
+            'curso':select_curso,
+        }
+        return render(request, 'funcionamento.html',context)
+
+    except Monitor.DoesNotExist:
+        return render(request, 'funcionamento.html',{'msg':'Nenhuma Monitoria Cadastrada Nesse Curso!'})
+
+
 
 @login_required
 def excluir_conta(request):
