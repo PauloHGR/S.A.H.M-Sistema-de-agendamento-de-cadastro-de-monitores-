@@ -332,4 +332,97 @@ def excluir_conta(request):
 
 @login_required
 def feed_monitoria(request):
-    return render(request, 'sahm/feedMonitoria.html')
+    user = User.objects.get(username= request.user.username)
+    #monitorias = Monitoria.objects.select_related('user').all()
+    monitorias = user.monitoria.all()
+
+    #try:
+        #monitorias = Monitoria.objects.filter(user=user)
+    #except Monitoria.DoesNotExist:
+        #return render(request, 'sahm/feedMonitoria.html', {'msg':'sem'})
+
+    context = {'monitorias':monitorias}
+    return render(request, 'sahm/feedMonitoria.html', context)
+
+@login_required
+def alterar_monitoria(request, pk):
+    #user = User.objects.get(username= request.user.username)
+
+    try:
+        if request.method == "POST":
+
+            monitoria = Monitoria.objects.get(pk=pk)
+            form_monitoria = MonitoriaModelForm(request.POST or None, instance=monitoria)
+            if form_monitoria.is_valid():
+                if request.user.is_authenticated:
+
+                    monitoria = form_monitoria.save(commit=False)
+                    monitoria.user = user
+                    monitoria.sala = form_monitoria.cleaned_data.get('sala')
+                    monitoria.dia = form_monitoria.cleaned_data.get('dia')
+                    monitoria.hora_inicio = form_monitoria.cleaned_data.get('hora_inicio')
+                    monitoria.hora_termino = form_monitoria.cleaned_data.get('hora_termino')
+                    monitoria.save()
+                    context = {'form_monitoria':monitoria, 'user':user, 'msg':'Dados alterados com sucesso!'}
+                    return render(request, 'sahm/monitoria_update.html', context)
+
+                else:
+                    return redirect('/acesso')
+
+            else:
+                return redirect('/acesso')
+        else:
+            monitoria = Monitoria.objects.get(pk=pk)
+            form_monitoria = MonitoriaModelForm(instance=monitoria)
+            context = {'form_monitoria':form_monitoria, 'user':user}
+            return render(request, 'sahm/monitoria_update.html', context)
+
+    except Monitoria.DoesNotExist:
+
+        if request.method == "POST":
+            #form_monitor = MonitorModelForm(request.POST or None, initial={'telefone':user.monitor.telefone, 'nascimento':user.monitor.nascimento, 'curso': user.monitor.curso, 'materia':user.monitor.materia}, prefix="moni")
+            form_monitoria = MonitoriaModelForm(request.POST or None)
+            if form_monitoria.is_valid():
+                if request.user.is_authenticated:
+
+                    monitoria = form_monitoria.save(commit=False)
+                    monitoria.user = user
+                    monitoria.sala = form_monitoria.cleaned_data.get('sala')
+                    monitoria.dia = form_monitoria.cleaned_data.get('dia')
+                    monitoria.hora_inicio = form_monitoria.cleaned_data.get('hora_inicio')
+                    monitoria.hora_termino = form_monitoria.cleaned_data.get('hora_termino')
+                    monitoria.save()
+                    context = {'form_monitoria':monitoria, 'user':user, 'msg':'Dados alterados com sucesso!'}
+                    return render(request, 'sahm/monitoria_update.html', context)
+
+                else:
+                    return redirect('/acesso')
+
+            else:
+                return redirect('/acesso')
+        else:
+            form_monitoria = MonitoriaModelForm()
+            context = {'form_monitoria':form_monitoria, 'user':user}
+            return render(request, 'sahm/monitoria_update.html', context)
+
+def lista_monitorias(request):
+    user = User.objects.get(username=request.user.username)
+    monitorias = user.monitoria.all()
+    #monitorias = Monitoria.objects.select_related('user').all()
+
+    #try:
+
+    #except Monitoria.DoesNotExist:
+        #return render(request, 'sahm/feedMonitoria.html', {'msg':'sem'})
+
+    context = {'monitorias':monitorias}
+    return render(request, 'funcionamento.html', context)
+
+@login_required
+def excluir_conta(request):
+
+    user = User.objects.get(username= request.user.username)
+    Monitoria.objects.get(user=user).delete()
+    messages.success(request, "The Monitoria is deleted")
+    logout(request)
+    return render(request, 'sahm/login.html', {})

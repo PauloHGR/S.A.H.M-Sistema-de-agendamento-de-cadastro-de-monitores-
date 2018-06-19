@@ -18,4 +18,6 @@ urlpatterns = [
     url(r'^mudar_senha/$', views.update_password, name='update_password'),
     url(r'^mudar_email/$', views.update_email, name='update_email'),
     url(r'^excluir_conta/$', views.excluir_conta, name='excluir_conta'),
+    url(r'^monitorias_disponiveis/$', views.lista_monitorias, name='lista_monitorias'),
+    url(r'^alterar_monitoria/(?P<pk>[0-9]+)/$', views.alterar_monitoria, name='alterar_monitoria'),
 ]

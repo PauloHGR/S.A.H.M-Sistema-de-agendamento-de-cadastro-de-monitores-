@@ -1,0 +1,85 @@
+{% extends 'viewMonitor.html' %}
+
+{% block content %}
+
+<div class="info">
+  <h2 class="page-header">Atualizar Monitoria</h2>
+</div>
+
+{% if msg %}
+  <h4>{{msg}}</h4>
+{% else %}
+<form class="form-horizontal" data-toggle="validator" role="form" method="POST" action="{% url 'sahm:alterar_monitoria' %}">{% csrf_token %}
+    <fieldset>
+
+        <!-- Text input-->
+        <div class="row">
+          <div class="form-group">
+              <label class="col-md-3 control-label" for="id_sala">Local:</label>
+              <div class="col-md-2">
+                  <!--<input id="sala_monitoria" name="sala" type="text" placeholder="Nº da Sala" class="form-control input-md" required="">-->
+                {{form_monitoria.sala}}
+                <div class="help-block with-errors"></div>
+              </div>
+          </div>
+        </div>
+
+        <!-- Appended Input-->
+        <div class="row">
+          <div class="form-group">
+              <label class="col-md-3 control-label" for="id_dia">Dia da Monitoria:</label>
+              <div class="col-md-4">
+                  <div class="input-group">
+                      <!--<input id="eventDate" name="eventDate" class="form-control" placeholder="DD/MM/YYYY" type="date" required="">-->
+                      {{form_monitoria.dia}}
+                      <div class="help-block with-errors"></div>
+                  </div>
+
+              </div>
+          </div>
+        </div>
+        <!-- Text input-->
+        <div class="row">
+          <div class="form-group">
+              <label class="col-md-3 control-label" for="id_hora_inicio">Horário de Início:</label>
+              <div class="col-md-3">
+                  <!--<input id="id_hora_inicio" name="venueName" type="time" placeholder="" class="form-control input-md">-->
+                  {{form_monitoria.hora_inicio}}
+                  <div class="help-block with-errors"></div>
+              </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+              <label class="col-md-3 control-label" for="id_hora_termino">Horário de Término:</label>
+              <div class="col-md-3">
+                  <!--<input id="id_hora_termino" name="hora_termino" type="time"  class="form-control input-md">-->
+                  {{form_monitoria.hora_termino}}
+                  <div class="help-block with-errors"></div>
+              </div>
+          </div>
+        </div>
+
+        {% if msg2 %}
+          <h4> {{msg2}} </h4>
+        {% endif %}
+
+        {% if msgOk %}
+          <h4>{{msgOk}}</h4>
+        {% else %}
+        <!-- Button (Double) -->
+          <div class="row">
+            <div class="form-group">
+                <label class="col-md-1 control-label" for="submitButton"></label>
+                <div class="col-md-8">
+                    <button id="submitButton" name="submitButton" class="btn btn-primary">Alterar Monitoria</button>
+                    <a href="{% url 'sahm:acesso_monitor' %}" class="btn btn-default">Cancelar</a>
+                </div>
+            </div>
+          </div>
+        {% endif %}
+    </fieldset>
+</form>
+{% endif %}
+{% endblock %}
