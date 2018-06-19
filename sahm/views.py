@@ -435,9 +435,10 @@ def lista_monitorias(request):
 
 
 @login_required
-def excluir_conta(request):
+def excluir_conta2(request):
 
     user = User.objects.get(username= request.user.username)
+
     Monitoria.objects.get(user=user).delete()
     messages.success(request, "The Monitoria is deleted")
     logout(request)
